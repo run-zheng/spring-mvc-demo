@@ -14,18 +14,17 @@
 		<property name="filters">
 			<list>
 				<bean class="org.springframework.web.filter.CharacterEncodingFilter" p:encoding="UTF-8" />
-				<!-- <bean class="com.ihome.framework.web.filter.XssFilter">
+				<!-- <bean class="org.demo.spring.mvc.filter.filter.XssFilter">
 					<property name="excludeUrls">
 						<list>
-							<value>/agreement_sign_save</value>
-							<value>/agreement_resign_save</value>
+							<value>/abc</value>
 						</list>
 					</property>
 				</bean>
 				<ref bean="distributedSessionFilter" /> 
-				<bean class="com.ihome.framework.web.filter.HttpServletHolderFilter"/>
-				<bean class="com.ihome.framework.web.filter.LoggerMDCFilter"/>
-				<bean class="com.ihome.framework.web.filter.PageDigestFilter" /> -->
+				<bean class="org.demo.spring.mvc.filter.filter.HttpServletHolderFilter"/>
+				<bean class="org.demo.spring.mvc.filter.filter.LoggerMDCFilter"/>
+				<bean class="org.demo.spring.mvc.filter.filter.PageDigestFilter" /> -->
 			</list>
 		</property>
 	</bean>
