@@ -2,9 +2,11 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:p="http://www.springframework.org/schema/p" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:task="http://www.springframework.org/schema/task"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
 
 	<context:component-scan base-package="org.demo.spring.mvc">
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
@@ -32,4 +34,9 @@
 	<import resource="bean-import.xml"/>
 	
 	<aop:aspectj-autoproxy proxy-target-class="true"/>
+
+
+
+	<task:annotation-driven executor="springExecutor" />
+	<task:executor id="springExecutor" pool-size="50" />
 </beans>
