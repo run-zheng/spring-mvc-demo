@@ -10,6 +10,6 @@ import java.lang.annotation.Target;
 @Documented
 @Retention (RUNTIME)
 @Target(METHOD)
-public @interface BizFlowConfig {
-    String value() default "hello";
+public @interface Config {
+    String value() default "";
 }

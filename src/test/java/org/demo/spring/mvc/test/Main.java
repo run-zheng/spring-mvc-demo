@@ -1,7 +1,7 @@
 package org.demo.spring.mvc.test;
 
 import com.alibaba.fastjson.JSON;
-import org.demo.spring.mvc.annotation.BizFlowConfig;
+import org.demo.spring.mvc.annotation.Config;
 import org.demo.spring.mvc.annotation.BizFlowConfiger;
 import org.demo.spring.mvc.composite.BizFlowConfigureDemo;
 import org.springframework.core.type.AnnotationMetadata;
@@ -23,12 +23,12 @@ public class Main {
         MetadataReader metadataReader = factory.getMetadataReader(BizFlowConfigureDemo.class.getName());
         AnnotationMetadata annotationMetadata = metadataReader.getAnnotationMetadata();
         System.out.println(annotationMetadata.isAnnotated(BizFlowConfiger.class.getName()));
-        Set<MethodMetadata> annotatedMethods = annotationMetadata.getAnnotatedMethods(BizFlowConfig.class.getName());
+        Set<MethodMetadata> annotatedMethods = annotationMetadata.getAnnotatedMethods(Config.class.getName());
         for (MethodMetadata methodMetaData : annotatedMethods ) {
             System.out.println(methodMetaData.getMethodName()
-            + " " + methodMetaData.isAnnotated(BizFlowConfig.class.getName())
+            + " " + methodMetaData.isAnnotated(Config.class.getName())
             + "\r\n       "
-            + JSON.toJSONString(methodMetaData.getAllAnnotationAttributes(BizFlowConfig.class.getName())));
+            + JSON.toJSONString(methodMetaData.getAllAnnotationAttributes(Config.class.getName())));
         }
 
     }

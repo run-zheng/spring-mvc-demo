@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Component
-public @interface BizEntryPoint {
+public @interface EntryPoint {
 	String value() default ""; 
-	String description() default "流程入口点"; 
 }

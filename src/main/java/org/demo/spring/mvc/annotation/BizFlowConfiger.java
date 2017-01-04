@@ -14,5 +14,4 @@ import org.springframework.stereotype.Component;
 @Component
 public @interface BizFlowConfiger {
 	String value() default ""; 
-	String description() default "流程配置"; 
 }
