@@ -12,4 +12,6 @@ import java.lang.annotation.Target;
 @Target(METHOD)
 public @interface Config {
     String value() default "";
+    
+    String description() default "" ; 
 }

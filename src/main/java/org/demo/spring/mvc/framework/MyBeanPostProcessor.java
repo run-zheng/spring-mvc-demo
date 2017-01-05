@@ -3,6 +3,7 @@ package org.demo.spring.mvc.framework;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Map;
 import java.util.Set;
 
 import org.demo.spring.mvc.annotation.BizFlowConfiger;
@@ -44,38 +45,50 @@ public class MyBeanPostProcessor implements ApplicationContextAware, BeanPostPro
 
 	@Override
 	public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-		System.out.println("beanName: " + beanName + "  bean:"+JSON.toJSONString(bean));
-		
-		if(bean != null){
+		System.out.println("beanName: " + beanName + "  bean:" + JSON.toJSONString(bean));
+
+		if (bean != null) {
 			MetadataReader metadataReader;
 			try {
 				metadataReader = factory.getMetadataReader(bean.getClass().getName());
 				AnnotationMetadata annotationMetadata = metadataReader.getAnnotationMetadata();
-		        System.out.println(annotationMetadata.isAnnotated(BizFlowConfiger.class.getName()));
-		        Set<MethodMetadata> annotatedMethods = annotationMetadata.getAnnotatedMethods(Config.class.getName());
-		        for (MethodMetadata methodMetaData : annotatedMethods ) {
-		            System.out.println(methodMetaData.getMethodName()
-		            + " " + methodMetaData.isAnnotated(Config.class.getName())
-		            + "\r\n       "
-		            + JSON.toJSONString(methodMetaData.getAllAnnotationAttributes(Config.class.getName())));
-		            
-		            methodMetaData.getAllAnnotationAttributes(Config.class.getName());
-		            
-		            Method configMethod = ReflectionUtils.findMethod(bean.getClass(), methodMetaData.getMethodName()); 
-		            Object result = configMethod.invoke(bean, new Object[0]);
-		            if(result instanceof BizFlowConfig){
-		            	
-		            }else {
-		            	throw new BizFlowConfigException("return object should be instance of");
-		            }
-		        }
+				//BizFlowConfiger类型的Bean拿到所有Config注解的方法，并执行得到结果， 
+				if (annotationMetadata.isAnnotated(BizFlowConfiger.class.getName())) {
+					System.out.println(annotationMetadata.isAnnotated(BizFlowConfiger.class.getName()));
+					Set<MethodMetadata> annotatedMethods = annotationMetadata
+							.getAnnotatedMethods(Config.class.getName());
+					
+					for (MethodMetadata methodMetaData : annotatedMethods) {
+						System.out.println(methodMetaData.getMethodName() + " "
+								+ methodMetaData.isAnnotated(Config.class.getName()) + "\r\n       "
+								+ JSON.toJSONString(methodMetaData.getAllAnnotationAttributes(Config.class.getName())));
+
+						//paramTypes为空，不判断参数类型是否匹配，所以不支持方法重载
+						Class<?>[] paramTypes = null; 
+						Method configMethod = ReflectionUtils.findMethod(bean.getClass(),
+								methodMetaData.getMethodName(), paramTypes);
+						
+						if(configMethod == null){
+							throw new BizFlowConfigException("config method is null!!!"+ " bean name: "
+									+beanName+" bean class: "+ bean.getClass().getName());  
+						}
+						Object result = configMethod.invoke(bean, new Object[0]);
+						if (result instanceof BizFlowConfig) {
+
+						} else {
+							throw new BizFlowConfigException("return object should be instance of "
+									+BizFlowConfig.class.getName() + " bean name: "
+									+beanName+" bean class: "+ bean.getClass().getName());
+						}
+					}
+				}
 			} catch (IOException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 				LOG.error(e.getMessage(), e);
 				throw new BizFlowConfigException(e.getMessage(), e);
-			} 
-	        
+			}
+
 		}
-		
+
 		return bean;
 	}
 

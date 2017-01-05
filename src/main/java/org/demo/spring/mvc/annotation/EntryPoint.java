@@ -14,4 +14,6 @@ import org.springframework.stereotype.Component;
 @Component
 public @interface EntryPoint {
 	String value() default ""; 
+	
+	String description() default ""; 
 }
