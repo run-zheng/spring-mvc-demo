@@ -5,10 +5,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Set;
 
-import org.demo.spring.mvc.annotation.Config;
 import org.demo.spring.mvc.annotation.BizFlowConfiger;
-import org.demo.spring.mvc.aspect.HandlerAspect;
-import org.demo.spring.mvc.composite.BizFlowConfigureDemo;
+import org.demo.spring.mvc.annotation.Config;
+import org.demo.spring.mvc.exception.BizFlowConfigException;
+import org.demo.spring.mvc.framework.domain.BizFlowConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -21,7 +21,6 @@ import org.springframework.core.type.classreading.CachingMetadataReaderFactory;
 import org.springframework.core.type.classreading.MetadataReader;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
-import org.springframework.util.ReflectionUtils.MethodCallback;
 
 import com.alibaba.fastjson.JSON;
 
@@ -64,19 +63,16 @@ public class MyBeanPostProcessor implements ApplicationContextAware, BeanPostPro
 		            
 		            Method configMethod = ReflectionUtils.findMethod(bean.getClass(), methodMetaData.getMethodName()); 
 		            Object result = configMethod.invoke(bean, new Object[0]);
-		            if(!(result instanceof BizFlowConfiger)){
+		            if(result instanceof BizFlowConfig){
 		            	
+		            }else {
+		            	throw new BizFlowConfigException("return object should be instance of");
 		            }
 		        }
-			} catch (IOException e) {
+			} catch (IOException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 				LOG.error(e.getMessage(), e);
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-			}
+				throw new BizFlowConfigException(e.getMessage(), e);
+			} 
 	        
 		}
 		
